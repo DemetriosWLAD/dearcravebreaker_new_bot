@@ -1007,7 +1007,7 @@ class SimpleDearCraveBreakerBot:
 
 Поздравляю! Вы успешно справились с импульсом.
 
-💎 **+10 XP**
+💎 **Отличная работа!**
 
 """
             
@@ -1015,7 +1015,7 @@ class SimpleDearCraveBreakerBot:
             if new_badges:
                 text += "🏆 **НОВЫЕ ДОСТИЖЕНИЯ!**\n"
                 for badge_name, xp_reward in new_badges:
-                    text += f"• {badge_name} (+{xp_reward} XP)\n"
+                    text += f"• {badge_name}\n"
                     # Try AI-enhanced achievement celebration first
                     progress = await self.get_user_progress(user_id)
                     ai_celebration = await MotivationQuotesGenerator().get_ai_achievement_celebration(badge_name, progress)
@@ -1180,13 +1180,13 @@ class SimpleDearCraveBreakerBot:
                 # Process successful intervention with gamification
                 new_badges = await self.process_intervention_success(user_id, "emergency")
                 
-                text = "🎉 **Отлично!**\n\nВы справились с импульсом! Это большая победа.\n\n💎 **+10 XP**"
+                text = "🎉 **Отлично!**\n\nВы справились с импульсом! Это большая победа.\n\n💎 **Отличная работа!**"
                 
                 # Add badge notifications if any
                 if new_badges:
                     text += "\n\n🏆 **НОВЫЕ ДОСТИЖЕНИЯ!**\n"
                     for badge_name, xp_reward in new_badges:
-                        text += f"• {badge_name} (+{xp_reward} XP)\n"
+                        text += f"• {badge_name}\n"
                 
                 keyboard = {
                     "inline_keyboard": [

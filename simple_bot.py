@@ -1035,7 +1035,6 @@ class SimpleDearCraveBreakerBot:
             
             keyboard = {
                 "inline_keyboard": [
-                    [{"text": "🏆 Мои достижения", "callback_data": "achievements"}],
                     [{"text": "📊 Моя статистика", "callback_data": "show_stats"}],
                     [{"text": "🏠 Главное меню", "callback_data": "back_to_menu"}]
                 ]
@@ -1190,7 +1189,6 @@ class SimpleDearCraveBreakerBot:
                 
                 keyboard = {
                     "inline_keyboard": [
-                        [{"text": "🏆 Мои достижения", "callback_data": "achievements"}],
                         [{"text": "📊 Моя статистика", "callback_data": "show_stats"}],
                         [{"text": "🏠 Главное меню", "callback_data": "back_to_menu"}]
                     ]
@@ -1232,7 +1230,6 @@ class SimpleDearCraveBreakerBot:
                 "inline_keyboard": [
                     [{"text": "🔄 Новая цитата", "callback_data": "daily_motivation"}],
                     [{"text": "🎯 Вечерняя рефлексия", "callback_data": "evening_reflection"}],
-                    [{"text": "🏆 Мои достижения", "callback_data": "achievements"}],
                     [{"text": "🆘 Нужна поддержка", "callback_data": "emergency_help"}],
                     [{"text": "🏠 Главное меню", "callback_data": "back_to_menu"}]
                 ]

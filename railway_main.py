@@ -29,11 +29,15 @@ bot_instance = None
 @app.route('/')
 def health_check():
     """Simple health check for Railway"""
+    token_configured = bool(os.getenv('PRODUCTION_TELEGRAM_BOT_TOKEN'))
     return {
         'status': 'healthy',
-        'service': 'DearCraveBreaker',
+        'service': 'DearCraveBreaker Bot Railway',
         'platform': 'Railway',
-        'timestamp': time.time()
+        'timestamp': time.time(),
+        'bot_token_configured': token_configured,
+        'bot_running': bot_instance is not None,
+        'instructions': 'Set PRODUCTION_TELEGRAM_BOT_TOKEN for @dearcravebreaker_new_bot' if not token_configured else 'Bot should be working'
     }
 
 @app.route('/ping')
@@ -45,18 +49,24 @@ def start_telegram_bot():
     try:
         token = os.getenv('PRODUCTION_TELEGRAM_BOT_TOKEN')
         if not token:
-            logger.warning("No PRODUCTION_TELEGRAM_BOT_TOKEN found")
+            logger.warning("No PRODUCTION_TELEGRAM_BOT_TOKEN found - bot will not start")
+            logger.warning("Please set PRODUCTION_TELEGRAM_BOT_TOKEN with your new bot token")
             return
             
+        logger.info(f"Starting bot with token: ...{token[-10:] if token else 'None'}")
+        
         # Import and start bot
         from simple_bot import SimpleDearCraveBreakerBot
         global bot_instance
         
         bot_instance = SimpleDearCraveBreakerBot()
+        logger.info("Bot instance created, starting polling...")
         asyncio.run(bot_instance.run())
         
     except Exception as e:
         logger.error(f"Telegram bot error: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
 
 if __name__ == "__main__":
     # Get port from Railway

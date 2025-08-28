@@ -188,7 +188,7 @@ def main():
         
         logger.info(f"Starting DearCraveBreaker PRODUCTION Flask health server on {host}:{port}")
         logger.info(f"Production bot token configured: {bool(os.getenv('PRODUCTION_TELEGRAM_BOT_TOKEN'))}")
-        logger.info(f"Environment: PRODUCTION")
+        logger.info(f"Environment: PRODUCTION (Railway)")
         
         # Start the Telegram bot in a separate thread AFTER Flask is ready
         try:

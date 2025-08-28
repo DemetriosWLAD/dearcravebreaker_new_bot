@@ -13,7 +13,7 @@ import aiosqlite
 from datetime import datetime, timedelta
 import random
 import json
-from motivation_quotes import MotivationQuotesGenerator
+from motivation_quotes_fix import motivation_generator
 
 # Настройка логирования
 logging.basicConfig(
@@ -306,6 +306,9 @@ class SimpleDearCraveBreakerBot:
         
         # Update progress
         await self.update_user_progress(user_id, progress)
+        
+        # Return empty list since badge system is disabled
+        return []
     
     async def send_message(self, chat_id, text, reply_markup=None):
         """Отправка сообщения через Telegram API"""
@@ -1000,7 +1003,7 @@ class SimpleDearCraveBreakerBot:
                 """, (user_id, user_id))
                 await db.commit()
             
-            # Process successful intervention with gamification
+            # Process successful intervention
             new_badges = await self.process_intervention_success(user_id, "impulse")
             
             text = """🎉 **Отлично! Техника сработала!**
@@ -1012,18 +1015,18 @@ class SimpleDearCraveBreakerBot:
 """
             
             # Add badge notifications if any
-            if new_badges:
+            if new_badges and len(new_badges) > 0:
                 text += "🏆 **НОВЫЕ ДОСТИЖЕНИЯ!**\n"
-                for badge_name, xp_reward in new_badges:
+                for badge_name, _ in new_badges:
                     text += f"• {badge_name}\n"
                     # Try AI-enhanced achievement celebration first
                     progress = await self.get_user_progress(user_id)
-                    ai_celebration = await MotivationQuotesGenerator().get_ai_achievement_celebration(badge_name, progress)
+                    ai_celebration = await motivation_generator.get_ai_achievement_celebration(badge_name, progress)
                     if ai_celebration:
                         text += f"\n💫 *{ai_celebration}*\n"
                     else:
                         # Fallback to curated achievement quote
-                        achievement_quote = MotivationQuotesGenerator().get_achievement_quote(badge_name, xp_reward)
+                        achievement_quote = motivation_generator.get_achievement_quote(badge_name, 0)
                         text += f"\n💫 *{achievement_quote}*\n"
             
             text += """
@@ -1176,15 +1179,15 @@ class SimpleDearCraveBreakerBot:
                 await db.commit()
             
             if success:
-                # Process successful intervention with gamification
+                # Process successful intervention
                 new_badges = await self.process_intervention_success(user_id, "emergency")
                 
-                text = "🎉 **Отлично!**\n\nВы справились с импульсом! Это большая победа.\n\n💎 **Отличная работа!**"
+                text = "🎉 **Отлично!**\n\nВы справились с импульсом! Это большая победа.\n\n💎 **Молодец!**"
                 
                 # Add badge notifications if any
-                if new_badges:
+                if new_badges and len(new_badges) > 0:
                     text += "\n\n🏆 **НОВЫЕ ДОСТИЖЕНИЯ!**\n"
-                    for badge_name, xp_reward in new_badges:
+                    for badge_name, _ in new_badges:
                         text += f"• {badge_name}\n"
                 
                 keyboard = {
@@ -1211,10 +1214,10 @@ class SimpleDearCraveBreakerBot:
             progress = await self.get_user_progress(user_id)
             
             # Get AI-enhanced personalized quote
-            enhanced_quote = MotivationQuotesGenerator().get_enhanced_personalized_quote(progress, "morning")
+            enhanced_quote = motivation_generator.get_enhanced_personalized_quote(progress, "morning")
             
             # Get daily challenge
-            daily_challenge = MotivationQuotesGenerator().get_daily_challenge_quote()
+            daily_challenge = motivation_generator.get_daily_challenge_quote()
             
             text = f"""💫 **ПЕРСОНАЛЬНАЯ МОТИВАЦИЯ**
 
@@ -1240,7 +1243,7 @@ class SimpleDearCraveBreakerBot:
             progress = await self.get_user_progress(user_id)
             
             # Get AI-enhanced evening reflection quote
-            reflection_quote = MotivationQuotesGenerator().get_enhanced_personalized_quote(progress, "evening_reflection")
+            reflection_quote = motivation_generator.get_enhanced_personalized_quote(progress, "evening_reflection")
             
             text = f"""🌅 **ВЕЧЕРНЯЯ РЕФЛЕКСИЯ**
 
